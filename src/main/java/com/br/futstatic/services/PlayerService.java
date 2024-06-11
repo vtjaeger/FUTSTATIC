@@ -27,7 +27,8 @@ public class PlayerService {
         List<Player> players = playerRepository.findAll();
         List<PlayerDto> playerDtos = players.stream()
                 .map(player -> new PlayerDto(player.getId(), player.getName(), player.getAge(),
-                        Optional.ofNullable(player.getCurrentTeam()).map(Team::getName).orElse(null)))
+                        Optional.ofNullable(player.getCurrentTeam()).map(Team::getName).orElse(null),
+                        player.getPosition(), player.getNumber()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(playerDtos);
     }
