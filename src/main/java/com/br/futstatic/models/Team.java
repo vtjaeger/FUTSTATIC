@@ -4,6 +4,7 @@ import com.br.futstatic.dtos.NewTeam;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,16 +19,18 @@ public class Team {
     @OneToMany(mappedBy = "currentTeam", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Player> players;
-    private String awards;
+    private List<String> awards;
+    private int yearFoundation;
 
     public Team(NewTeam newTeam) {
         this.name = newTeam.name();
         this.country = newTeam.country();
         this.players = newTeam.players();
-        if(newTeam.awards() != null) {
-            this.awards = newTeam.awards();
+        this.yearFoundation = newTeam.yearFoundation();
+        if (newTeam.awards() != null) {
+            this.awards = new ArrayList<>(newTeam.awards());
         } else {
-            this.awards = null;
+            this.awards = new ArrayList<>();
         }
     }
 
@@ -66,19 +69,28 @@ public class Team {
         this.players = players;
     }
 
-    public String getAwards() {
+    public List<String> getAwards() {
         return awards;
     }
 
-    public void setAwards(String awards) {
+    public void setAwards(List<String> awards) {
         this.awards = awards;
     }
 
-    public Team(Long id, String name, Countries country, List<Player> players) {
+    public int getYearFoundation() {
+        return yearFoundation;
+    }
+
+    public void setYearFoundation(int yearFoundation) {
+        this.yearFoundation = yearFoundation;
+    }
+
+    public Team(Long id, String name, Countries country, List<Player> players, int yearFoundation) {
         this.id = id;
         this.name = name;
         this.country = country;
         this.players = players;
+        this.yearFoundation = yearFoundation;
     }
 
 }
