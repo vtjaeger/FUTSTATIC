@@ -1,4 +1,4 @@
-package com.br.futstatic.dtos;
+package com.br.futstatic.dtos.post;
 
 import com.br.futstatic.models.Positions;
 import com.br.futstatic.models.Team;
@@ -11,6 +11,8 @@ public record NewPlayer(
         @NotNull
         int age,
         String currentTeam,
+        @NotNull
         Positions position,
+        @NotNull
         int number) {
 }

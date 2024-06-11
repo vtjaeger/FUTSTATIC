@@ -1,4 +1,4 @@
-package com.br.futstatic.dtos;
+package com.br.futstatic.dtos.get;
 
 import java.util.List;
 

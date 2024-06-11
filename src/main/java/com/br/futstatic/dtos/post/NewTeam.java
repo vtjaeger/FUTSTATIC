@@ -1,4 +1,4 @@
-package com.br.futstatic.dtos;
+package com.br.futstatic.dtos.post;
 
 import com.br.futstatic.models.Countries;
 import com.br.futstatic.models.Player;
