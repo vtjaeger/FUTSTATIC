@@ -9,5 +9,6 @@ public record NewTeam(
         String name,
         Countries country,
         List<Player> players,
-        String awards) {
+        List<String> awards,
+        int yearFoundation) {
 }
