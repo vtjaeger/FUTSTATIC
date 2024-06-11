@@ -1,6 +1,6 @@
 package com.br.futstatic.models;
 
-import com.br.futstatic.dtos.NewTeam;
+import com.br.futstatic.dtos.post.NewTeam;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

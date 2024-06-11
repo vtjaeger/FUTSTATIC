@@ -1,7 +1,8 @@
 package com.br.futstatic.services;
 
-import com.br.futstatic.dtos.NewPlayer;
-import com.br.futstatic.dtos.PlayerDto;
+import com.br.futstatic.dtos.patch.UpdatePlayer;
+import com.br.futstatic.dtos.post.NewPlayer;
+import com.br.futstatic.dtos.get.PlayerDto;
 import com.br.futstatic.models.Player;
 import com.br.futstatic.models.Team;
 import com.br.futstatic.repositories.PlayerRepository;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,5 +41,42 @@ public class PlayerService {
         Team team = teamOptional.get();
         Player player = new Player(newPlayer, team);
         return ResponseEntity.ok().body(playerRepository.save(player));
+    }
+
+    public ResponseEntity updatePlayer(Long id, UpdatePlayer dto){
+        Optional<Player> playerOptional = playerRepository.findById(id);
+
+        if(playerOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("player id not found.");
+        }
+        Player player = playerOptional.get();
+        if(dto.age() != 0) {
+            player.setAge(dto.age());
+        }
+        if(dto.number() != 0) {
+            player.setAge(dto.number());
+        }
+        if(dto.position() != null) {
+            player.setPosition(dto.position());
+        }
+        if(dto.currentTeam() != null) {
+            Optional<Team> teamOptional = teamRepository.findByName(dto.currentTeam());
+            if(teamOptional.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("team not found");
+            }
+            Team team = teamOptional.get();
+            player.setCurrentTeam(team);
+        }
+        playerRepository.save(player);
+
+        PlayerDto response = new PlayerDto(
+                player.getId(),
+                player.getName(),
+                player.getAge(),
+                player.getCurrentTeam() != null ? player.getCurrentTeam().getName() : null,
+                player.getPosition(),
+                player.getNumber()
+        );
+        return ResponseEntity.ok().body(response);
     }
 }

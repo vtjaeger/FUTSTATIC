@@ -1,6 +1,6 @@
 package com.br.futstatic.controllers;
 
-import com.br.futstatic.dtos.NewTeam;
+import com.br.futstatic.dtos.post.NewTeam;
 import com.br.futstatic.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

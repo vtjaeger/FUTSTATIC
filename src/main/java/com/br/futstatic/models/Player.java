@@ -1,6 +1,6 @@
 package com.br.futstatic.models;
 
-import com.br.futstatic.dtos.NewPlayer;
+import com.br.futstatic.dtos.post.NewPlayer;
 import jakarta.persistence.*;
 
 @Entity
