@@ -27,4 +27,9 @@ public class PlayerController {
     public ResponseEntity updatePlayer(@PathVariable(value = "id") Long id, @RequestBody UpdatePlayer updatePlayer) {
         return playerService.updatePlayer(id, updatePlayer);
     }
+
+    @PatchMapping("/retired/{id}")
+    public ResponseEntity retirePlayer(@PathVariable(value = "id") Long id){
+        return playerService.retirePlayer(id);
+    }
 }

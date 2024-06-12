@@ -17,13 +17,20 @@ public class Player {
     @Enumerated(EnumType.STRING)
     private Positions position;
     private int number;
+    private Boolean retired;
 
     public Player(NewPlayer newPlayer, Team team) {
         this.name = newPlayer.name();
         this.age = newPlayer.age();
-        this.currentTeam = team;
+        if(newPlayer.currentTeam() != null) {
+            this.currentTeam = team;
+            this.number = newPlayer.number();
+        } else {
+            this.currentTeam = null;
+            this.number = Integer.parseInt(null);
+        }
         this.position = newPlayer.position();
-        this.number = newPlayer.number();
+        this.retired = false;
     }
 
     public Player() {
@@ -75,5 +82,22 @@ public class Player {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public Boolean getRetired() {
+        return retired;
+    }
+
+    public void setRetired(Boolean retired) {
+        this.retired = retired;
+    }
+
+    public void updateRetired(){
+        this.retired = !this.retired;
+        // if(!this.retired) {
+        //            this.retired = true;
+        //        } else {
+        //            this.retired = false;
+        //        }
     }
 }

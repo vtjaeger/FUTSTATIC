@@ -7,6 +7,7 @@ import com.br.futstatic.models.Player;
 import com.br.futstatic.models.Team;
 import com.br.futstatic.repositories.PlayerRepository;
 import com.br.futstatic.repositories.TeamRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,17 +29,15 @@ public class PlayerService {
         List<PlayerDto> playerDtos = players.stream()
                 .map(player -> new PlayerDto(player.getId(), player.getName(), player.getAge(),
                         Optional.ofNullable(player.getCurrentTeam()).map(Team::getName).orElse(null),
-                        player.getPosition(), player.getNumber()))
+                        player.getPosition(), player.getNumber(),
+                        player.getRetired()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(playerDtos);
     }
 
     public ResponseEntity postNewPlayer(NewPlayer newPlayer){
         Optional<Team> teamOptional = teamRepository.findByName(String.valueOf(newPlayer.currentTeam()));
-        if(teamOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid team");
-        }
-        Team team = teamOptional.get();
+        Team team = teamRepository.findByName(newPlayer.currentTeam()).orElse(null);
         Player player = new Player(newPlayer, team);
         return ResponseEntity.ok().body(playerRepository.save(player));
     }
@@ -75,7 +74,30 @@ public class PlayerService {
                 player.getAge(),
                 player.getCurrentTeam() != null ? player.getCurrentTeam().getName() : null,
                 player.getPosition(),
-                player.getNumber()
+                player.getNumber(),
+                player.getRetired()
+        );
+        return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity retirePlayer(Long id){
+        Optional<Player> playerOptional = playerRepository.findById(id);
+        if(playerOptional == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("id not found");
+        }
+        Player player = playerOptional.get();
+        player.updateRetired();
+        player.setCurrentTeam(null);
+        playerRepository.save(player);
+
+        PlayerDto response = new PlayerDto(
+                player.getId(),
+                player.getName(),
+                player.getAge(),
+                player.getCurrentTeam() != null ? player.getCurrentTeam().getName() : null,
+                player.getPosition(),
+                player.getNumber(),
+                player.getRetired()
         );
         return ResponseEntity.ok().body(response);
     }
