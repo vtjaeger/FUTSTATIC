@@ -13,6 +13,5 @@ public record NewPlayer(
         String currentTeam,
         @NotNull
         Positions position,
-        @NotNull
         int number) {
 }

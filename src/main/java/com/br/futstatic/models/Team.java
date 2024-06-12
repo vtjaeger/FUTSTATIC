@@ -19,6 +19,7 @@ public class Team {
     @OneToMany(mappedBy = "currentTeam", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Player> players;
+    private String coach;
     private List<String> awards;
     private int yearFoundation;
 
@@ -26,6 +27,7 @@ public class Team {
         this.name = newTeam.name();
         this.country = newTeam.country();
         this.players = newTeam.players();
+        this.coach = newTeam.coach();
         this.yearFoundation = newTeam.yearFoundation();
         if (newTeam.awards() != null) {
             this.awards = new ArrayList<>(newTeam.awards());
@@ -85,11 +87,20 @@ public class Team {
         this.yearFoundation = yearFoundation;
     }
 
-    public Team(Long id, String name, Countries country, List<Player> players, int yearFoundation) {
+    public String getCoach() {
+        return coach;
+    }
+
+    public void setCoach(String coach) {
+        this.coach = coach;
+    }
+
+    public Team(Long id, String name, Countries country, List<Player> players, String coach, int yearFoundation) {
         this.id = id;
         this.name = name;
         this.country = country;
         this.players = players;
+        this.coach = coach;
         this.yearFoundation = yearFoundation;
     }
 

@@ -21,8 +21,11 @@ public class TeamService {
     public ResponseEntity<List<TeamDto>> getAllTeams(){
         List<Team> teams = teamRepository.findAll();
         List<TeamDto> response = teams.stream()
-                .map(team -> new TeamDto(team.getId(), team.getName(), team.getCountry().toString(),
+                .map(team -> new TeamDto(team.getId(),
+                        team.getName(),
+                        team.getCountry().toString(),
                         team.getPlayers().stream().map(Player::getName).collect(Collectors.toList()),
+                        team.getCoach(),
                         team.getAwards()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);
