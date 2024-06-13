@@ -38,7 +38,6 @@ public class MatchService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(response);
     }
-
     public ResponseEntity postMatch(NewMatch newMatch){
         Optional<Team> team_home = teamRepository.findByName(newMatch.homeTeam());
         Optional<Team> visiting_team = teamRepository.findByName(newMatch.visitingTeam());
