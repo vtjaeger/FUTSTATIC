@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,10 +28,15 @@ public class PlayerService {
     public ResponseEntity<List<PlayerDto>> getAllPlayers(){
         List<Player> players = playerRepository.findAll();
         List<PlayerDto> playerDtos = players.stream()
-                .map(player -> new PlayerDto(player.getId(), player.getName(), player.getAge(),
+                .map(player -> new PlayerDto(player.getId(),
+                        player.getName(),
+                        player.getAge(),
                         Optional.ofNullable(player.getCurrentTeam()).map(Team::getName).orElse(null),
-                        player.getPosition(), player.getNumber(),
-                        player.getRetired()))
+                        player.getPosition(),
+                        player.getNumber(),
+                        player.getRetired(),
+                        player.getLatestTeams().stream().map(Team::getName).collect(Collectors.toList()))
+                )
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(playerDtos);
     }
@@ -75,7 +81,8 @@ public class PlayerService {
                 player.getCurrentTeam() != null ? player.getCurrentTeam().getName() : null,
                 player.getPosition(),
                 player.getNumber(),
-                player.getRetired()
+                player.getRetired(),
+                player.getLatestTeams().stream().map(Team::getName).collect(Collectors.toList())
         );
         return ResponseEntity.ok().body(response);
     }
@@ -87,6 +94,18 @@ public class PlayerService {
         }
         Player player = playerOptional.get();
         player.updateRetired();
+
+        if(player.getRetired()) {
+            Team team = player.getCurrentTeam();
+            if(team != null) {
+                List<Team> latestTeams = player.getLatestTeams();
+                if(latestTeams == null) {
+                    latestTeams = new ArrayList<>();
+                }
+                latestTeams.add(team);
+            }
+        }
+
         player.setCurrentTeam(null);
         playerRepository.save(player);
 
@@ -97,7 +116,8 @@ public class PlayerService {
                 player.getCurrentTeam() != null ? player.getCurrentTeam().getName() : null,
                 player.getPosition(),
                 player.getNumber(),
-                player.getRetired()
+                player.getRetired(),
+                player.getLatestTeams().stream().map(Team::getName).collect(Collectors.toList())
         );
         return ResponseEntity.ok().body(response);
     }

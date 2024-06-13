@@ -3,6 +3,9 @@ package com.br.futstatic.models;
 import com.br.futstatic.dtos.post.NewPlayer;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tb_players")
 public class Player {
@@ -17,6 +20,8 @@ public class Player {
     @Enumerated(EnumType.STRING)
     private Positions position;
     private int number;
+    @OneToMany
+    private List<Team> latestTeams;
     private Boolean retired;
 
     public Player(NewPlayer newPlayer, Team team) {
@@ -90,6 +95,14 @@ public class Player {
 
     public void setRetired(Boolean retired) {
         this.retired = retired;
+    }
+
+    public List<Team> getLatestTeams() {
+        return latestTeams;
+    }
+
+    public void setLatestTeams(List<Team> latestTeams) {
+        this.latestTeams = latestTeams;
     }
 
     public void updateRetired(){
