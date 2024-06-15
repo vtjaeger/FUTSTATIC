@@ -49,4 +49,15 @@ public class MatchService {
         var match = new Match(newMatch, homeTeam, visitingTeam);
         return ResponseEntity.ok().body(matchRepository.save(match));
     }
+
+    public ResponseEntity finishMatch(Long id){
+        Optional<Match> matchOptional = matchRepository.findById(id);
+        if(matchOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("match not found");
+        }
+        Match match = matchOptional.get();
+        match.finishMatch();
+        matchRepository.save(match);
+        return ResponseEntity.ok().build();
+    }
 }
