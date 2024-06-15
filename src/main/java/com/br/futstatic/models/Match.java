@@ -80,4 +80,8 @@ public class Match {
         this.stadium = newMatch.stadium();
         this.finished = false;
     }
+
+    public void finishMatch(){
+        this.finished = !this.finished;
+    }
 }

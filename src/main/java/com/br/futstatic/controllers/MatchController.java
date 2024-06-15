@@ -21,4 +21,10 @@ public class MatchController {
     public ResponseEntity postMatch(@RequestBody NewMatch newMatch){
         return matchService.postMatch(newMatch);
     }
+
+    @PatchMapping("/finish/{id}")
+    public ResponseEntity finishMatch(@PathVariable(value = "id") Long id){
+        return matchService.finishMatch(id);
+    }
+
 }
